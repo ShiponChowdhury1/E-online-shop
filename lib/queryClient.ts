@@ -4,7 +4,7 @@ import { createSyncStoragePersister } from "@tanstack/query-sync-storage-persist
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 5 * 60 * 1000, // 5 minutes — এই সময়ের মধ্যে same data refetch হবে না
+      staleTime: 10 * 1000, // 10 seconds — ক্যাশড ডাটা দেখানোর পর ব্যাকগ্রাউন্ডে ফ্রেশ ডাটা রিফেচ করবে
       gcTime: 30 * 60 * 1000, // 30 minutes — localStorage এ cache থাকবে
       refetchOnWindowFocus: false,
       retry: 1,

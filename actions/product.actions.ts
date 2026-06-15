@@ -4,7 +4,7 @@ import { connectDB } from "@/lib/db";
 import mongoose from "mongoose";
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
-import { unstable_cache, revalidatePath } from "next/cache";
+import { unstable_cache, revalidatePath, revalidateTag } from "next/cache";
 
 // ─── Product Schema ───
 const productSchema = new mongoose.Schema(
@@ -125,7 +125,7 @@ const _fetchProducts = unstable_cache(
     };
   },
   ["products-list"],
-  { revalidate: 5 * 60 } // 5 মিনিট cache
+  { revalidate: 5 * 60, tags: ["products-list"] } // 5 মিনিট cache
 );
 
 // ─── Get All Products ───
@@ -187,7 +187,7 @@ const _fetchProductBySlug = unstable_cache(
     return { success: true, data: JSON.parse(JSON.stringify(product)) };
   },
   ["product-by-slug"],
-  { revalidate: 5 * 60 }
+  { revalidate: 5 * 60, tags: ["product-by-slug"] }
 );
 
 // ─── Get Product by Slug ───
@@ -251,6 +251,8 @@ export async function createProductAction(data: {
     });
 
     // নতুন product তৈরি হলে cache clear করো
+    revalidateTag("products-list");
+    revalidateTag("featured-products");
     revalidatePath("/products");
     revalidatePath("/");
 
@@ -287,6 +289,9 @@ export async function updateProductAction(
     await product.save();
 
     // Cache clear করো যাতে নতুন data দেখা যায়
+    revalidateTag("products-list");
+    revalidateTag("product-by-slug");
+    revalidateTag("featured-products");
     revalidatePath("/products");
     revalidatePath("/");
 
@@ -317,6 +322,8 @@ export async function deleteProductAction(productId: string) {
     }
 
     await Product.findByIdAndDelete(productId);
+    revalidateTag("products-list");
+    revalidateTag("featured-products");
     revalidatePath("/products");
     revalidatePath("/");
     return { success: true, message: "Product deleted" };
@@ -344,7 +351,7 @@ export const getFeaturedProductsAction = unstable_cache(
     }
   },
   ["featured-products"],
-  { revalidate: 5 * 60 }
+  { revalidate: 5 * 60, tags: ["featured-products"] }
 );
 
 // ─── Get Categories ───
@@ -360,7 +367,7 @@ export const getCategoriesAction = unstable_cache(
     }
   },
   ["categories-list"],
-  { revalidate: 10 * 60 } // 10 মিনিট cache (categories কম change হয়)
+  { revalidate: 10 * 60, tags: ["categories-list"] } // 10 মিনিট cache (categories কম change হয়)
 );
 
 // ─── Get Seller Products ───
