@@ -54,10 +54,9 @@ otpSchema.index({ email: 1, purpose: 1 });
 const OtpModel = mongoose.models.Otp || mongoose.model("Otp", otpSchema);
 
 // ─── Email Helper ───
-const SMTP_EMAIL = process.env.SMTP_EMAIL || "";
-const SMTP_PASSWORD = process.env.SMTP_PASSWORD || "";
-
 function getTransporter() {
+  const SMTP_EMAIL = process.env.SMTP_EMAIL || "";
+  const SMTP_PASSWORD = process.env.SMTP_PASSWORD || "";
   return nodemailer.createTransport({
     host: process.env.SMTP_HOST || "smtp.gmail.com",
     port: parseInt(process.env.SMTP_PORT || "587", 10),
@@ -83,8 +82,9 @@ async function sendOtpEmail(to: string, otp: string, purpose: "verify" | "reset"
         This code expires in <strong>10 minutes</strong>. Do not share it with anyone.
       </p>
     </div>`;
+  const senderEmail = process.env.SMTP_EMAIL || "";
   await getTransporter().sendMail({
-    from: `"eBay" <${SMTP_EMAIL}>`,
+    from: `"eBay" <${senderEmail}>`,
     to,
     subject,
     html,

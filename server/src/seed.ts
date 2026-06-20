@@ -254,7 +254,7 @@ async function seed() {
   try {
     console.log("🔌 Connecting to MongoDB...");
     await mongoose.connect(MONGODB_URI);
-    console.log("✅ Connected to MongoDB!\n");
+
 
     // ─── Clear existing data ───
     console.log("🗑️  Clearing existing data...");
@@ -323,7 +323,7 @@ async function seed() {
       role: "buyer",
       isVerified: true,
     });
-    console.log(`✅ Buyer created: ${buyer.email}`);
+ 
 
     // ─── Seed Products ───
     console.log("\n📦 Seeding products...");
@@ -361,15 +361,6 @@ async function seed() {
     console.log(`✅ ${productDocs.length} products created`);
 
     // ─── Summary ───
-    console.log("\n═══════════════════════════════════════");
-    console.log("🎉 Database seeded successfully!");
-    console.log("═══════════════════════════════════════");
-    console.log(`📁 Categories: ${categoryDocs.length}`);
-    console.log(`👤 Admin: admin@ebay.com / password123`);
-    console.log(`🏪 Sellers: ${sellerDocs.length}`);
-    console.log(`👤 Buyer: buyer@ebay.com / password123`);
-    console.log(`📦 Products: ${productDocs.length}`);
-    console.log("═══════════════════════════════════════\n");
 
   } catch (error) {
     console.error("❌ Seed failed:", error);

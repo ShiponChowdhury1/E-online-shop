@@ -54,10 +54,7 @@ const startServer = async () => {
     app.listen(env.PORT, () => {
       console.log(`
 ╔══════════════════════════════════════════════════╗
-║   🛒 eBay Marketplace API Server                ║
-║   📡 Port: ${String(env.PORT).padEnd(37)}║
-║   🌍 Environment: ${env.NODE_ENV.padEnd(30)}║
-║   📅 Started: ${new Date().toLocaleString().padEnd(34)}║
+║  ✅ Server is running on port ${env.PORT} in ${env.NODE_ENV} mode
 ╚══════════════════════════════════════════════════╝
       `);
     });
